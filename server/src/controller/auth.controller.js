@@ -50,23 +50,19 @@ export const login = async (req, res) => {
   const user = await UserModel.findOne({ email });
 
   if (!user) {
-    return res
-      .status(404)
-      .json({
-        sucess: false,
-        message: "Invalid Credentials! Please try again",
-      });
+    return res.status(404).json({
+      sucess: false,
+      message: "Invalid Credentials! Please try again",
+    });
   }
 
   const validPassword = await bcrypt.compare(password, user.password);
 
   if (!validPassword) {
-    return res
-      .status(401)
-      .json({
-        sucess: false,
-        message: "Invalid Credentials! Please try again",
-      });
+    return res.status(401).json({
+      sucess: false,
+      message: "Invalid Credentials! Please try again",
+    });
   }
 
   const token = jwt.sign({ id: user._id }, config.JWT_SECRET_KEY, {
@@ -79,6 +75,16 @@ export const login = async (req, res) => {
     sameSite: "strict",
     maxAge: 7 * 24 * 60 * 60 * 1000, //7 days
   });
-  
-  return res.status(200).json({sucess: true, message:"User logged in sucessfully!"})
+
+  return res
+    .status(200)
+    .json({ sucess: true, message: "User logged in sucessfully!" });
+};
+
+export const logout = async (req, res) => {
+  res.clearCookie("token");
+
+  return res
+    .status(200)
+    .json({ sucess: false, message: "Logged out successfully!!" });
 };

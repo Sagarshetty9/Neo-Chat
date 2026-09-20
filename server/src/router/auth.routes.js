@@ -8,7 +8,7 @@ import {
 } from "../miiddleware/sanitizeRequest.middleware.js";
 
 const authRouter = express.Router();
-//Need to change get => post
+
 authRouter.post("/login", validateSchema(userLoginSchema), login);
 authRouter.post("/register", validateSchema(userRegisterSchema), register);
 

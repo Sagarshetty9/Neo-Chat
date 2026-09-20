@@ -1,14 +1,14 @@
 import { z } from "zod";
 
 export const userLoginSchema = z.object({
-  email: z.email(),
+  email: z.email().trim(),
   password: z.string(),
 });
 
 export const userRegisterSchema = z.object({
-  email: z.email(),
-  password: z.string(),
-  username: z.string(),
+  email: z.email().trim(),
+  password: z.string().trim().min(6),
+  username: z.string().trim().min(3),
 });
 
 export function validateSchema(schema) {
