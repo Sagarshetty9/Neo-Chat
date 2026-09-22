@@ -1,42 +1,61 @@
-import config from "../config/config.js";
 import UserModel from "../model/user.model.js";
-
-import jwt from "jsonwebtoken";
 
 export const searchUser = async (req, res) => {
   const { searchQuery } = req.validatedData;
 
   const user = await UserModel.find(
-    { username: { $regex: searchQuery } },
-    { username: 1 },
+    { username: { $regex: searchQuery, $options: "i" } },
+    { username: 1 }, //returns array of users with fields username, id,
   );
 
-  if (!user.username) {
-    return res.status(404).json({ sucess: false, message: "User not found!" });
+  if (user.length === 0) {
+    throw new Error("User not found!");
   }
 
   return res
-    .status(400)
-    .json({ sucess: true, message: "Search sucessfull!", user });
+    .status(200)
+    .json({ success: true, message: "Search successfull!", user });
 };
 
 export const getUserDetails = async (req, res) => {
-  const token = req.cookies.token;
+  const token = req.decodedToken;
 
-  const decoded = jwt.verify(token, config.JWT_SECRET_KEY);
-
-  const user = await UserModel.findById(decoded.id);
+  const user = await UserModel.findById(token.id);
 
   if (!user) {
-    return res.status(404).json({
-      sucess: false,
-      message: "You are not authorized to make this query",
-    });
+    throw new Error("You are not authorized to make this query!");
   }
 
   return res.status(200).json({
-    sucess: true,
+     success: true,
     user,
-    message: "User details fetched sucessfully!",
+    message: "User details fetched successfully!", //TODO>> Make it send only required data and populate the data
   });
+};
+
+export const addContact = async (req, res) => {
+  const token = req.decodedToken;
+  const { contactId } = req.body;
+
+  const user = await UserModel.findById(token.id);
+  const targetUser = await UserModel.findById(contactId);
+
+  if (!targetUser) {
+    throw new Error("User not found!");
+  }
+
+  if (user.contacts.includes(targetUser._id)) {
+    throw new Error("Already in contacts!");
+  }
+
+  console.log(user);
+  console.log(targetUser);
+
+  user.contacts.push(targetUser._id);
+  targetUser.contacts.push(user._id);
+
+  await user.save();
+  await targetUser.save();
+
+  return res.status(200).json({success: true , message: "Added to contatcts successfully"})
 };
