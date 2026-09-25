@@ -1,6 +1,6 @@
 import express from "express";
-import { validateSearch } from "../miiddleware/validateSearchQuery.js";
-import checkAuthentication from "../miiddleware/auth.middleware.js";
+import { validateSearch } from "../middleware/validateSearchQuery.js";
+import checkAuthentication from "../middleware/auth.middleware.js";
 
 import { searchUser, getUserDetails, addContact } from "../controller/user.controller.js";
 

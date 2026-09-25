@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const messageSchema = mongoose.Schema(
   {
@@ -24,6 +24,10 @@ const messageSchema = mongoose.Schema(
   },
   { timestamps: true },
 );
+
+messageSchema.index({ sender: 1, receiver: 1 });
+messageSchema.index({ status: 1 });
+
 
 
 const MessageModel = mongoose.Model("Messages", messageSchema);

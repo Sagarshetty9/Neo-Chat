@@ -3,18 +3,18 @@ import UserModel from "../model/user.model.js";
 export const searchUser = async (req, res) => {
   const { searchQuery } = req.validatedData;
 
-  const user = await UserModel.find(
+  const users = await UserModel.find(
     { username: { $regex: searchQuery, $options: "i" } },
     { username: 1 }, //returns array of users with fields username, id,
   );
 
-  if (user.length === 0) {
+  if (users.length === 0) {
     throw new Error("User not found!");
   }
 
   return res
     .status(200)
-    .json({ success: true, message: "Search successfull!", user });
+    .json({ success: true, message: "Search successfull!", users });
 };
 
 export const getUserDetails = async (req, res) => {
