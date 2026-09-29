@@ -30,7 +30,7 @@ messageSchema.index({ status: 1 });
 
 
 
-const MessageModel = mongoose.Model("Messages", messageSchema);
+const MessageModel = mongoose.model("Messages", messageSchema);
 
 
 export default MessageModel;

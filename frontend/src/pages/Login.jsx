@@ -5,7 +5,7 @@ import { AuthContext } from "../context/authContext.jsx";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const { login } = useContext(AuthContext);
+  const { login, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [form, setForm] = useState({ email: "", password: "" });
@@ -19,10 +19,11 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form);
+
 
     try {
-      await login(form);
+      const result = await login(form);
+      setUser(result.user)
       navigate("/chat");
     } catch (error){
       setError("Login failed. Please try again." || error.message);

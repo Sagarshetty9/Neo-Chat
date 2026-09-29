@@ -1,14 +1,10 @@
-function UserCard({results}) {
-  return <>
-    <div className="mt-4">
-    {results.map((user) => (
-      <div
-        key={user._id}
-        className="p-2 border cursor-pointer hover:bg-gray-100 m-1" >
-        {user.username}
-      </div>
-    ))}
-  </div></>;
+function UserCard({ user, onSelectUser }) {
+  console.log(user)
+  return (
+    <div onClick={() => onSelectUser(user._id)} className="p-2 border cursor-pointer">
+      <p>{user.username}</p>
+    </div>
+  );
 }
 
 export default UserCard;

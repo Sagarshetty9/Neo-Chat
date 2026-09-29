@@ -34,4 +34,5 @@ app.use((err, req, res, next) => {
 
 server.listen(config.PORT, () => {
   console.log(`Server running on http://localhost:${config.PORT}`);
+   console.log(`Socket.io listening...`);
 });

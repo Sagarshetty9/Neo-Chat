@@ -3,7 +3,7 @@ import Input from "../components/ui/Input.jsx";
 import { searchUserApi } from "../api/userApi.js";
 import UserCard from "./UserCard.jsx";
 
-function SearchUser({}) {
+function SearchUser({ onSelectUser }) {
   const [search, setSearch] = useState("");
   const [results, setResults] = useState([]);
 
@@ -12,8 +12,8 @@ function SearchUser({}) {
     setSearch(value);
 
     if (value.length > 2) {
-      const results = await searchUserApi(value)
-      setResults(results)
+      const results = await searchUserApi(value);
+      setResults(results);
     } else {
       setResults([]);
     }
@@ -28,8 +28,11 @@ function SearchUser({}) {
         value={search}
         onChange={handleSearch}
       />
-
-      <UserCard results={results}/>
+      <div>
+        {results.map((user) => (
+          <UserCard key={user._id} user={user} onSelectUser={onSelectUser} />
+        ))}
+      </div>
     </div>
   );
 }

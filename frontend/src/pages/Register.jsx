@@ -6,7 +6,7 @@ import { AuthContext } from "../context/authContext.jsx";
 import { useNavigate } from "react-router-dom";
 
 function Register() {
-  const { register } = useContext(AuthContext);
+  const { register, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [form, setForm] = useState({ username: "", email: "", password: "" });
@@ -23,7 +23,8 @@ function Register() {
     console.log(form);
 
     try {
-      await register(form);
+      const result = await register(form);
+      setUser(result.user);
       navigate("/chat");
     } catch (error) {
       setError("Registration failed. Please try again." || error.message);

@@ -39,15 +39,24 @@ export const register = async (req, res) => {
   });
 
   return res.status(201).json({
-    sucess: true,
+    success: true,
     message: "User registered sucessfully!",
+    user: {
+      _id: newUser._id,
+      username: newUser.username,
+      email: newUser.email,
+      contacts: newUser.contacts,
+    },
   });
 };
 
 export const login = async (req, res) => {
   const { email, password } = req.validatedData;
 
-  const user = await UserModel.findOne({ email });
+  const user = await UserModel.findOne({ email }).populate(
+    "contacts",
+    "username",
+  );
 
   if (!user) {
     return res.status(404).json({
@@ -73,12 +82,19 @@ export const login = async (req, res) => {
     httpOnly: true,
     secure: true,
     sameSite: "strict",
-    maxAge: 7 * 24 * 60 * 60 * 1000, //7 days
+    // maxAge: 7 * 24 * 60 * 60 * 1000, //7 days
   });
 
-  return res
-    .status(200)
-    .json({ sucess: true, message: "User logged in sucessfully!" });
+  return res.status(200).json({
+    sucess: true,
+    message: "User logged in sucessfully!",
+    user: {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      contacts: user.contacts,
+    },
+  });
 };
 
 export const logout = async (req, res) => {
