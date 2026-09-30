@@ -58,7 +58,7 @@ export const addContact = async (req, res) => {
     success: true, 
     message: "Added to contacts successfully",
     contact: {
-      id: targetUser._id,
+      _id: targetUser._id,
       username: targetUser.username
     }
   });

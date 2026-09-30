@@ -7,7 +7,7 @@ import { searchUser, getUserDetails, addContact } from "../controller/user.contr
 const userRouter = express.Router();
 
 userRouter.get("/search", checkAuthentication, validateSearch, searchUser);
-userRouter.get("/getUserDetails", checkAuthentication, getUserDetails);
+userRouter.get("/user-details", checkAuthentication, getUserDetails);
 
 userRouter.post("/add-contact", checkAuthentication, addContact)
 

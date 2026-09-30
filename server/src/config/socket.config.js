@@ -9,16 +9,9 @@ export function initSocket(io) {
       const ids = [userId.toString(), targetUserId.toString()].sort();
       const roomId = `chat_${ids[0]}_${ids[1]}`;
       socket.join(roomId);
-      console.log(
-        `${socket.userId} joined room with ${targetUserId} at room ${roomId}`,
-      );
     });///
 
     socket.on("send-message", async (data) => {
-  
-      console.log('Socket ID received from:', socket.id);
-      console.log('Raw data:', data);
-
       
        const { message, targetUserId } = data;
 
@@ -26,7 +19,6 @@ export function initSocket(io) {
       const userId = socket.userId;
       const ids = [userId.toString(), targetUserId.toString()].sort();
       const roomId = `chat_${ids[0]}_${ids[1]}`;
-      console.log(targetUserId)
 
       const savedMessage = await MessageModel.create({
         text: message,  

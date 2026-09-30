@@ -1,11 +1,62 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
 
+body {
+    &::selection {
+        background: #fdd844;
+        color: #1d2724;
+    }
+}
+
+* {
+    font-family: "Space Grotesk";
+}
+
+.Toastify__toast {
+    border: 3px solid #000;
+    background-color: #ffff00;
+    color: #000;
+    font-weight: bold;
+    border-radius: 0;
+    box-shadow: 4px 4px 0 #000;
+}
+
+.Toastify__toast--success {
+    background-color: #ffff00;
+}
+
+.Toastify__toast--error {
+    background-color: #ff6b6b;
+    color: #fff;
+}
 
 @theme {
-  --color-nb-red: #EF4444;
-  --color-nb-purple: #8B5CF6;
-  --color-nb-cyan: #06B6D4;
-  --color-nb-yellow: #FBBF24;
-  --color-nb-dark: #1F2937;
-  --color-nb-cream: #F8F5F1;
+    --font-sans: "Space Grotesk", sans-serif;
+    --font-serif: "Instrument Serif", serif;
+    --font-mono: "JetBrains Mono", monospace;
+
+    /* Core palette */
+    --color-neo-ink: #21201c;
+    --color-neo-seafoam: #29acb3;
+    --color-neo-muted: #6d746f;
+    --color-neo-quiet: #8e8b83;
+    --color-neo-stone: #99948b;
+    --color-neo-taupe: #9b9b91;
+    --color-neo-warm-gray: #b8b1a5;
+
+    /* Accent colors */
+    --color-neo-lilac: #29acb3;
+    --color-neo-coral: #fb6a60;
+    --color-neo-sunflower: #fdd844;
+
+    /* Surface and background colors */
+    --color-neo-canvas: #f1e7d7;
+    --color-neo-surface: #f7eddf;
+    --color-neo-paper: #fbf4e8;
+    --color-neo-white: #fff8ec;
+
+    /* Borders and separators */
+    --color-neo-border: #cfc1af;
+    --color-neo-divider: #d9cdbd;
+    --color-neo-border-light: #e5daca;
 }

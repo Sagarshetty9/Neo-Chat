@@ -1,79 +1,102 @@
 import { useState, useContext } from "react";
-
+import { toast } from "react-toastify";
 import Button from "../components/ui/Button.jsx";
 import Input from "../components/ui/Input.jsx";
 import { AuthContext } from "../context/authContext.jsx";
 import { useNavigate } from "react-router-dom";
+import AuthSidebar from "../components/layout/AuthSideBar.jsx";
+import useTitle from "../hooks/useTitle.js"
 
 function Register() {
-  const { register, setUser } = useContext(AuthContext);
+  const { authApi, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
-
+useTitle("Get into neo world")
   const [form, setForm] = useState({ username: "", email: "", password: "" });
-  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
-    setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form);
 
     try {
-      const result = await register(form);
-      setUser(result.user);
+      const result = await authApi.register(form);
+      setUser(result.data.user);
       navigate("/chat");
     } catch (error) {
-      setError("Registration failed. Please try again." || error.message);
+      toast.error(error.response?.data?.message || "Registration failed");
     }
   };
 
   return (
-    <>
-      <div className="flex flex-col">
-        <p>Back to the welcome page</p>
-        <h1>Make Some Room</h1>
-        <h3>Create a home for the thought that deserves a little more time.</h3>
+    <div className="flex min-h-screen">
+      <AuthSidebar />
+      <div className="w-full md:w-1/2 bg-neo-paper p-6 md:p-12 flex flex-col justify-center">
+        <button
+          onClick={() => navigate("/")}
+          className="text-neo-quiet hover:text-neo-ink mb-12 font-semibold text-sm hover:cursor-pointer"
+        >
+          ← Back to the welcome page
+        </button>
 
-        <form onSubmit={handleSubmit}>
-          <Input
-            label="username"
-            id="username"
-            placeholder="What should we call you?"
-            name="username"
-            value={form.username}
-            onChange={handleChange}
-          />
-          <Input
-            label="email"
-            id="email"
-            placeholder="you@somewhere.good"
-            name="email"
-            type="email"
-            value={form.email}
-            onChange={handleChange}
-          />
-          <Input
-            label="password"
-            id="password"
-            type="password"
-            placeholder="A secret only you know"
-            onChange={handleChange}
-            value={form.password}
-            name="password"
-          />
-          <Button>Create my space</Button>
-        </form>
+        <div className="max-w-md">
+          <h1 className="text-4xl md:text-5xl font-bold text-neo-ink mb-3">
+            Make some room.
+          </h1>
+          <p className="text-neo-quiet mb-12">
+            Create a home for the thought that deserves a little more time.
+          </p>
 
-        <h6>
-          Already have an account?
-          <span className="font-semibold">Sign in</span>
-        </h6>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <Input
+              label="YOUR NAME"
+              id="username"
+              placeholder="How should Neo call you?"
+              name="username"
+              value={form.username}
+              onChange={handleChange}
+            />
+            <Input
+              label="EMAIL ADDRESS"
+              id="email"
+              placeholder="you@somewhere.good"
+              name="email"
+              type="email"
+              value={form.email}
+              onChange={handleChange}
+            />
+            <Input
+              label="PASSWORD"
+              id="password"
+              type="password"
+              placeholder="A secret only you know"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+            />
+
+            <Button
+              type="submit"
+              className="w-full bg-neo-coral text-neo-ink border-2 border-neo-ink py-3 font-bold"
+            >
+              Create my space
+            </Button>
+          </form>
+
+          <p className="text-center text-neo-quiet text-sm mt-8">
+            Already have a space?{" "}
+            <button
+              onClick={() => navigate("/login")}
+              className="text-neo-ink font-bold hover:underline hover:cursor-pointer"
+            >
+              Log in instead
+            </button>
+          </p>
+        </div>
       </div>
-    </>
+    </div>
   );
 }
 

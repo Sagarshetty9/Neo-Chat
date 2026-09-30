@@ -1,22 +1,33 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { debounce } from "../utils/debounce.js";
 import Input from "../components/ui/Input.jsx";
-import { searchUserApi } from "../api/userApi.js";
+import { userApi } from "../api/userApi.js";
 import UserCard from "./UserCard.jsx";
 
 function SearchUser({ onSelectUser }) {
   const [search, setSearch] = useState("");
   const [results, setResults] = useState([]);
 
-  const handleSearch = async (e) => {
+  const handleSearch = useCallback(
+    debounce(async (value) => {
+      if (value.length < 2) {
+        setResults([]);
+        return;
+      }
+      try {
+        const res = await userApi.searchUsers(value);
+        setResults(res.data.users || []);
+      } catch (error) {
+        setResults([]);
+      }
+    }, 300),
+    []
+  );
+  
+  const handleChange = (e) => {
     const value = e.target.value;
     setSearch(value);
-
-    if (value.length > 2) {
-      const results = await searchUserApi(value);
-      setResults(results);
-    } else {
-      setResults([]);
-    }
+    handleSearch(value);
   };
 
   return (
@@ -24,15 +35,22 @@ function SearchUser({ onSelectUser }) {
       <Input
         label="Find users"
         id="search"
-        placeholder="Find someone"
+        placeholder="🔍︎ Find someone..."
         value={search}
-        onChange={handleSearch}
+        onChange={handleChange}
       />
-      <div>
-        {results.map((user) => (
-          <UserCard key={user._id} user={user} onSelectUser={onSelectUser} />
-        ))}
-      </div>
+
+      {results.length > 0 ? (
+        <div className="max-h-80 overflow-y-auto border">
+          {results.map((user) => (
+            <UserCard key={user._id} user={user} onSelectUser={onSelectUser} />
+          ))}
+        </div>
+      ) : search.length > 2 ? (
+        <p className="p-3 border-b border-neo-divider bg-neo-paper">
+          No users found
+        </p>
+      ) : null}
     </div>
   );
 }

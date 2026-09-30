@@ -1,72 +1,96 @@
 import { useState, useContext } from "react";
+import { toast } from "react-toastify";
 import Button from "../components/ui/Button.jsx";
 import Input from "../components/ui/Input.jsx";
 import { AuthContext } from "../context/authContext.jsx";
 import { useNavigate } from "react-router-dom";
+import AuthSidebar from "../components/layout/AuthSideBar.jsx";
+import useTitle from "../hooks/useTitle.js"
 
 function Login() {
-  const { login, setUser } = useContext(AuthContext);
+  const { authApi, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  useTitle("Welcome Back!")
+
   const [form, setForm] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
-    setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-
     try {
-      const result = await login(form);
-      setUser(result.user)
+      const result = await authApi.login(form);
+      setUser(result.data.user);
       navigate("/chat");
-    } catch (error){
-      setError("Login failed. Please try again." || error.message);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Login failed");
     }
   };
 
   return (
-    <>
-      <div className="flex flex-col">
-        <p>Back to the welcome page</p>
-        <h1>Good to see you.</h1>
-        <h3>Pick up the thread wherever you left it.</h3>
+    <div className="flex min-h-screen">
+      <AuthSidebar />
+      <div className="w-full md:w-1/2 bg-neo-paper p-6 md:p-12 flex flex-col justify-center">
+        <button
+          onClick={() => navigate("/")}
+          className="text-neo-quiet hover:text-neo-ink mb-12 font-semibold text-sm"
+        >
+          ← Back to the welcome page
+        </button>
 
-        {error && <p className="text-red-500 font-semibold mb-4">{error}</p>}
+        <div className="max-w-md">
+          <h1 className="text-4xl md:text-5xl font-bold text-neo-ink mb-3">
+            Good to see you.
+          </h1>
+          <p className="text-neo-quiet mb-12">
+            Pick up the thread wherever you left it.
+          </p>
 
-        <form onSubmit={handleSubmit}>
-          <Input
-            label="email"
-            id="email"
-            placeholder="you@somewhere.good"
-            name="email"
-            type="email"
-            value={form.email}
-            onChange={handleChange}
-          />
-          <Input
-            label="password"
-            id="password"
-            type="password"
-            placeholder="Your secret"
-            onChange={handleChange}
-            value={form.password}
-            name="password"
-          />
-          <Button>Sign In</Button>
-        </form>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <Input
+              label="EMAIL ADDRESS"
+              id="email"
+              placeholder="you@somewhere.good"
+              name="email"
+              type="email"
+              value={form.email}
+              onChange={handleChange}
+            />
+            <Input
+              label="PASSWORD"
+              id="password"
+              type="password"
+              placeholder="A secret only you know"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+            />
 
-        <h6>
-          New here?
-          <span className="font-semibold">Make one in seconds</span>
-        </h6>
+            <Button
+              type="submit"
+              className="w-full bg-neo-coral text-neo-ink border-2 border-neo-ink py-3 font-bold"
+            >
+              Open my space
+            </Button>
+          </form>
+
+          <p className="text-center text-neo-quiet text-sm mt-8">
+            New here?{" "}
+            <button
+              onClick={() => navigate("/register")}
+              className="text-neo-ink font-bold hover:underline"
+            >
+              Make one in seconds
+            </button>
+          </p>
+        </div>
       </div>
-    </>
+    </div>
   );
 }
 

@@ -1,26 +1,19 @@
 const MessageBubble = ({ message, isOwn }) => {
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: isOwn ? 'flex-end' : 'flex-start',
-        marginBottom: '10px'
-      }}
-    >
+    <div className={`flex ${isOwn ? 'justify-end' : 'justify-start'} mb-4`}>
       <div
-        style={{
-          maxWidth: '60%',
-          padding: '10px 15px',
-          backgroundColor: isOwn ? '#ffff00' : '#1a1a1a',
-          color: isOwn ? '#000' : '#fff',
-          border: '2px solid #000',
-          borderRadius: '0',
-          wordWrap: 'break-word',
-          fontFamily: 'monospace'
-        }}
+        className={`max-w-xs md:max-w-md px-4 py-3 border-2 border-neo-ink ${
+          isOwn 
+            ? 'bg-neo-sunflower text-neo-ink' 
+            : 'bg-neo-seafoam text-neo-ink'
+        }`}
       >
-        <p style={{ margin: '0 0 5px 0' }}>{message.text}</p>
-        {isOwn && <small style={{ opacity: 0.7 }}>{message.status}</small>}
+        <p className="text-sm font-medium">{message.text}</p>
+        {isOwn && (
+          <p className="text-xs text-neo-quiet mt-2 opacity-70">
+            {message.timestamp || 'sent'}
+          </p>
+        )}
       </div>
     </div>
   );
