@@ -13,8 +13,8 @@ const server = createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: config.FRONTEND_URL,  // ← must be EXACTLY the Vite origin
-    credentials: true,                // ← this is what's missing/empty
+    origin: config.FRONTEND_URL,  
+    credentials: true,                
     methods: ['GET', 'POST'],
   },
 });

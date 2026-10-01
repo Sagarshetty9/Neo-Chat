@@ -14,8 +14,11 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: [config.FRONTEND_URL],  //Frontend links
-    credentials:true
+    origin: [
+      config.FRONTEND_URL,
+      "http://localhost:5173" 
+    ],
+    credentials: true
   }),
 );
 
