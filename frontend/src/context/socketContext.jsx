@@ -10,8 +10,8 @@ export function SocketProvider({ children }) {
 
   useEffect(() => {
     if (user) {
-      const newSocket = io("http://localhost:3000", {
-        withCredentials: true, // ← This sends cookies
+      const newSocket = io(import.meta.env.VITE_SOCKET_URL, {
+        withCredentials: true,
       });
       setSocket(newSocket);
       return () => newSocket.disconnect();
@@ -19,7 +19,7 @@ export function SocketProvider({ children }) {
   }, [user]);
 
   return (
-    <SocketContext.Provider value={{socket}}>
+    <SocketContext.Provider value={{ socket }}>
       {children}
     </SocketContext.Provider>
   );
