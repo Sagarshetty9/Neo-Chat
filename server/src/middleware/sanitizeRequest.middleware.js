@@ -16,8 +16,10 @@ export function validateSchema(schema) {
     const result = schema.safeParse(req.body);
 
     if (!result.success) {
-      console.log("didnt work")
-      throw new Error("Invalid Input! Please try again!");
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Input! Please try again!",
+      });
     }
 
     req.validatedData = result.data;

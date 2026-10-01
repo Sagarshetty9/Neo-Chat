@@ -1,9 +1,11 @@
 export function validateSearch(req, res, next) {
   const { username } = req.query;
 
-
-  if (!username.trim() || username.length < 1) {
-    throw new Error("Enter at least 1 characters to search");
+  if (!username || username.trim().length < 1) {
+    return res.status(400).json({
+      success: false,
+      message: "Enter at least 1 character to search",
+    });
   }
 
   req.validatedData = { searchQuery: username };
